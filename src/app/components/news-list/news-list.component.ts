@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { DocumentsService } from 'src/app/services/documents.service';
+import { Document } from '../../models/document';
 
 @Component({
   selector: 'app-news-list',
@@ -6,34 +9,35 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./news-list.component.scss'],
 })
 export class NewsListComponent implements OnInit {
-  public documents: any = [
-    {
-      title: "title 1",
-      description: "description 1",
-      date: "date 1",
-      content: "content 1",
-      author: "author 1",
-      archiveDate: "archiveDate 1",
-    },
-    {
-      title: "title 2",
-      description: "description 2",
-      date: "date 2",
-      content: "content 2",
-      author: "author 2",
-      archiveDate: "archiveDate 2",
-    },
-    {
-      title: "title 3",
-      description: "description 3",
-      date: "date 3",
-      content: "content 3",
-      author: "author 3",
-      archiveDate: "archiveDate 3",
-    },
-  ];
+  public documents: any = [{}];
 
-  constructor() {}
+  constructor(
+    private _documentsService: DocumentsService,
+    private _router: Router
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._documentsService.getDocuments().subscribe((documents) => {
+      this.documents = documents;
+    });
+  }
+
+  archiveDocument(document: Document) {
+    const today = new Date();
+    document.archiveDate =
+      today.getFullYear() +
+      '-' +
+      (today.getMonth() + 1) +
+      '-' +
+      today.getDate() +
+      ' ' +
+      today.getHours() +
+      ':' +
+      today.getMinutes() +
+      ':' +
+      today.getSeconds();
+    this._documentsService.archiveDocument(document).subscribe(() => {
+      this.ngOnInit();
+    });
+  }
 }

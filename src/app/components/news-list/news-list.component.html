@@ -1,7 +1,29 @@
-<h1>List of news</h1>
-<div *ngFor="let document of documents">
-  <h2>{{document.title}}</h2>
-  <div>
-    <p>{{document.description}}</p>
+<div class="container text-center">
+  <h1 class="text-center" style="margin-top: 1em">News</h1>
+
+  <a routerLink="/create" class="btn btn-primary btn-lg">Create new</a>
+  <a routerLink="/archive" class="btn btn-secondary btn-lg" style="margin-left: 1em;">Go to archived</a>
+  <div class="row">
+    <div class="col-md-12">
+      <hr />
+      <div class="well well-sm" *ngFor="let document of documents">
+        <div *ngIf="!document.archiveDate">
+          <legend class="header">
+            <h1>{{ document.title }}</h1>
+          </legend>
+          <p>
+            Author: <b>{{ document.author }}</b> / Content:
+            <b>{{ document.content }}</b> / Date: <b>{{ document.date }}</b>
+          </p>
+          <div>
+            <p>{{ document.description }}</p>
+          </div>
+          <div class="text-center">
+            <button (click)="archiveDocument(document)">Archive</button>
+          </div>
+          <hr />
+        </div>
+      </div>
+    </div>
   </div>
 </div>
